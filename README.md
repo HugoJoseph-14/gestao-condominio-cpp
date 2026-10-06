@@ -52,35 +52,3 @@ gestao-condominio-cpp/
 │   └── output/             # Diretório do executável compilado
 ├── .gitignore
 └── README.md
-
- ⚙️ Pré-requisitos
-Compilador C++: g++ (MinGW / GCC) com suporte a C++14 ou superior.
-
-Terminal: PowerShell / Prompt de Comando ou Terminal do VS Code.
-
-🚀 Como Compilar e Executar (PowerShell)
-1. Clonar o repositório
-PowerShell
-git clone [https://github.com/SEU_USUARIO/gestao-condominio-cpp.git](https://github.com/SEU_USUARIO/gestao-condominio-cpp.git)
-cd gestao-condominio-cpp
-2. Criar a pasta de saída do compilador
-O g++ exige que o diretório de destino do executável exista antes de compilar:
-
-PowerShell
-New-Item -ItemType Directory -Path src\output -Force
-3. Compilar o projeto
-Execute o comando abaixo para compilar todos os fontes da pasta src/ e gerar o executável:
-
-PowerShell
-g++ -Wall -Wextra -g3 -I include src\*.cpp -o src\output\main.exe
-4. Executar a simulação
-PowerShell
-.\src\output\main.exe
-🧪 Exemplo de Saída Esperada
-Ao rodar o programa, a simulação exibirá no terminal:
-
-Registro de Entradas e Saídas na Portaria com listagem de histórico.
-
-Detalhes completos dos Agendamentos vinculando Hóspede, Funcionário e Serviço.
-
-Atualização dinâmica de status do agendamento (ex: de Pendente para Concluido).
