@@ -6,8 +6,11 @@
 #include "servico.h"
 #include <string>
 
+// CONCEITO DE CLASSE / ASSOCIAÇÃO: A classe Agendamento conecta múltiplas instâncias do sistema de forma estruturada.
 class Agendamento {
+// MODIFICADOR DE ACESSO (Private): Encapsulamento dos dados da transação.
 private:
+    // PONTEIROS E REFERÊNCIAS: Utilização de ponteiros constantes para otimizar o uso de memória, evitando a cópia desnecessária dos objetos.
     const Hospede* hospede;
     const Funcionario* funcionario;
     const Servico* servico;

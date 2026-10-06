@@ -5,14 +5,11 @@ Servico::Servico(std::string desc, double p) : descricao(desc), preco(p) {}
 
 Servico::~Servico() {}
 
-std::string Servico::getDescricao() const {
-    return descricao;
-}
+// ENCAPSULAMENTO: Retorna atributos protegidos.
+std::string Servico::getDescricao() const { return descricao; }
+double Servico::getPreco() const { return preco; }
 
-double Servico::getPreco() const {
-    return preco;
-}
-
+// POLIMORFISMO: Método virtual base.
 void Servico::exibirDetalhes() const {
     std::cout << "Servico: " << descricao << " | Preco: R$ " << preco << std::endl;
 }
