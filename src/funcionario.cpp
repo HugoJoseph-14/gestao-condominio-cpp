@@ -16,3 +16,8 @@ void Funcionario::setEspecialidade(string novoEspecialidade) {
 }
 Funcionario::~Funcionario() {
 }
+void Funcionario::exibirDetalhes() const {
+    std::cout << "Nome: " << getNome() << std::endl;
+    std::cout << "Documento: " << getDocumento() << std::endl;
+    std::cout << "Especialidade: " << especialidade << std::endl;
+}

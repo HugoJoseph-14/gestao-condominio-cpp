@@ -8,8 +8,8 @@ class Pessoa {
         std::string documento;
 
     public:
-        std::string getNome();
-        std::string getDocumento();
+        std::string getNome() const;
+        std::string getDocumento() const;
         void setNome(std::string nomeNovo);
         void setDocumento(std::string documentoNovo);
 

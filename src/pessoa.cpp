@@ -11,10 +11,10 @@ Pessoa::Pessoa(string nomeInicial, string documentoInicial) {
     documento = documentoInicial;
 }
 
-string Pessoa::getNome() {
+string Pessoa::getNome() const {
     return nome;
 }
-string Pessoa::getDocumento() {
+string Pessoa::getDocumento() const {
     return documento;
 }
 void Pessoa::setNome(string nomeNovo) {

@@ -9,6 +9,7 @@ class Funcionario : public Pessoa {
     public:
         std::string getEspecialidade();
         void setEspecialidade(std::string novoEspecialidade);
+        void exibirDetalhes() const;
 
         Funcionario();
         Funcionario(std::string nomeInicial, std::string documentoInicial, std::string especialidadeInicial);

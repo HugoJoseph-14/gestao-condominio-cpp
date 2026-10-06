@@ -25,3 +25,9 @@ void Hospede::setDataCheckin(string novoDataCheckin) {
 }
 Hospede::~Hospede() {    
 }
+void Hospede::exibirDetalhes() const {
+    std::cout << "Nome: " << getNome() << std::endl;
+    std::cout << "Documento: " << getDocumento() << std::endl;
+    std::cout << "Quarto: " << numeroQuarto << std::endl;
+    std::cout << "Check-in: " << dataCheckin << std::endl;
+}

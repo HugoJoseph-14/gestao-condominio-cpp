@@ -13,6 +13,7 @@ class Hospede : public Pessoa {
         std::string getDataCheckin();
         void setNumeroQuarto(int novoNumeroQuarto);
         void setDataCheckin(std::string novoDataCheckin);
+        void exibirDetalhes() const;
 
         Hospede();
         Hospede(std::string nomeInicial, std::string documentoInicial, int numeroQuartoInicial, std::string dataCheckinInicial);
