@@ -52,3 +52,43 @@ gestao-condominio-cpp/
 │   └── output/             # Diretório do executável compilado
 ├── .gitignore
 └── README.md
+
+## Instruções de Uso
+
+### Pré-requisitos
+
+- Compilador C++ (g++, recomendado via [MSYS2](https://www.msys2.org/))
+- Suporte a C++17 ou superior
+
+### Compilando o projeto
+
+Na raiz do projeto, rode:
+
+```bash
+g++ -std=c++17 -Wall -Wextra -I include src/*.cpp -o src/output/main.exe
+```
+
+> No Windows (PowerShell), crie a pasta de saída antes, caso ainda não exista:
+> ```powershell
+> mkdir src\output
+> ```
+
+### Executando
+
+```bash
+./src/output/main.exe
+```
+
+(No Windows: `.\src\output\main.exe`)
+
+### Navegando pelo sistema
+
+Ao iniciar, o programa exibe um menu principal com três áreas:
+
+1. **Cadastros** — cadastrar e listar Hóspedes, Funcionários e Serviços (Elétrica, Hidráulica, Limpeza)
+2. **Agendamentos** — criar e listar agendamentos de serviço, vinculando um hóspede, um funcionário e um serviço já cadastrados
+3. **Portaria** — registrar entrada/saída de hóspedes ou funcionários, e consultar o histórico de acessos
+
+Digite o número da opção desejada e pressione Enter. Para voltar a um menu anterior, digite `0`.
+
+**Observação:** é necessário cadastrar pelo menos um Hóspede, um Funcionário e um Serviço antes de criar um Agendamento.
