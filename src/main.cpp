@@ -15,20 +15,38 @@
 
 using namespace std;
 
-// ---------- Armazenamento em memória do sistema ----------
+// ============================================================
+// ARMAZENAMENTO EM MEMORIA DO SISTEMA
+// ============================================================
+// Usamos vector<unique_ptr<T>> em vez de vector<T> comum.
+// Motivo: Agendamento guarda PONTEIROS (const Hospede*, etc.)
+// para esses objetos. Se usassemos vector<T> comum, adicionar
+// um novo item poderia fazer o vetor "realocar" na memoria,
+// movendo todos os objetos e invalidando qualquer ponteiro
+// que ja tivesse sido guardado em um Agendamento.
+// Com unique_ptr, apenas o ponteiro interno é movido quando o
+// vetor realoca — o objeto apontado continua no mesmo lugar.
 vector<unique_ptr<Hospede>> hospedes;
 vector<unique_ptr<Funcionario>> funcionarios;
 vector<unique_ptr<Servico>> servicos;
 vector<Agendamento> agendamentos;
 Portaria portaria;
 
-// ---------- Funções auxiliares de entrada ----------
+// ============================================================
+// FUNCOES AUXILIARES DE ENTRADA
+// ============================================================
 
+// Limpa o buffer do cin apos uma leitura invalida ou apos usar
+// cin >> antes de um getline (senao o getline pode "pular" por
+// pegar um caractere de nova linha que sobrou no buffer).
 void limparBufferEntrada() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+// Le um numero inteiro do usuario, repetindo a pergunta ate
+// receber algo valido (protege contra o usuario digitar texto
+// onde era esperado um numero).
 int lerInteiro(string mensagem) {
     int valor;
     cout << mensagem;
@@ -40,6 +58,8 @@ int lerInteiro(string mensagem) {
     return valor;
 }
 
+// Mesma logica do lerInteiro, mas para numeros com casas decimais
+// (usado em preco, duracao, etc.).
 double lerDouble(string mensagem) {
     double valor;
     cout << mensagem;
@@ -51,6 +71,9 @@ double lerDouble(string mensagem) {
     return valor;
 }
 
+// Le uma linha inteira de texto (nomes, descricoes, datas).
+// Usa getline em vez de cin >> porque cin >> para no primeiro
+// espaco, o que quebraria nomes compostos tipo "Maria Silva".
 string lerLinha(string mensagem) {
     string valor;
     cout << mensagem;
@@ -58,7 +81,9 @@ string lerLinha(string mensagem) {
     return valor;
 }
 
-// ---------- Cadastros ----------
+// ============================================================
+// CADASTROS
+// ============================================================
 
 void cadastrarHospede() {
     cout << "\n--- Cadastro de Hospede ---\n";
@@ -67,6 +92,8 @@ void cadastrarHospede() {
     int quarto = lerInteiro("Numero do quarto: ");
     string checkin = lerLinha("Data de checkin: ");
 
+    // make_unique cria o objeto e ja devolve embrulhado num unique_ptr,
+    // que e entao movido para dentro do vetor.
     hospedes.push_back(make_unique<Hospede>(nome, documento, quarto, checkin));
     cout << "Hospede cadastrado com sucesso!\n";
 }
@@ -89,6 +116,10 @@ void cadastrarServico() {
     string descricao = lerLinha("Descricao: ");
     double preco = lerDouble("Preco: ");
 
+    // Dependendo do tipo escolhido, criamos a subclasse correta de
+    // Servico. Cada uma tem um atributo extra proprio (voltagem,
+    // material especial, duracao), por isso pedimos esse dado so
+    // depois de saber qual tipo foi escolhido.
     if (tipo == 1) {
         int voltagem = lerInteiro("Voltagem: ");
         servicos.push_back(make_unique<ServicoEletrica>(descricao, preco, voltagem));
@@ -105,7 +136,13 @@ void cadastrarServico() {
     cout << "Servico cadastrado com sucesso!\n";
 }
 
-// ---------- Listagens ----------
+// ============================================================
+// LISTAGENS
+// ============================================================
+// Cada listagem imprime um indice "[i]" na frente de cada item.
+// Esses indices sao usados depois, em criarAgendamento() e nas
+// funcoes da portaria, para o usuario escolher "qual hospede",
+// "qual funcionario", etc., sem precisar digitar o nome inteiro.
 
 void listarHospedes() {
     cout << "\n--- Hospedes cadastrados ---\n";
@@ -115,6 +152,8 @@ void listarHospedes() {
     }
     for (size_t i = 0; i < hospedes.size(); i++) {
         cout << "[" << i << "] ";
+        // exibirDetalhes() e polimorfico: cada classe sabe se
+        // exibir do seu proprio jeito.
         hospedes[i]->exibirDetalhes();
     }
 }
@@ -155,9 +194,14 @@ void listarAgendamentos() {
     }
 }
 
-// ---------- Agendamento ----------
+// ============================================================
+// AGENDAMENTO
+// ============================================================
 
 void criarAgendamento() {
+    // Um agendamento so faz sentido se ja existir pelo menos um
+    // hospede, um funcionario e um servico cadastrados — senao
+    // nao ha o que escolher.
     if (hospedes.empty() || funcionarios.empty() || servicos.empty()) {
         cout << "\nE preciso ter pelo menos um hospede, um funcionario e um servico cadastrados.\n";
         return;
@@ -186,6 +230,9 @@ void criarAgendamento() {
 
     string dataHora = lerLinha("Data/Hora do agendamento: ");
 
+    // .get() devolve o ponteiro "cru" (Hospede*, Funcionario*, Servico*)
+    // de dentro do unique_ptr, sem transferir posse do objeto.
+    // E exatamente o tipo que o construtor de Agendamento espera.
     agendamentos.push_back(Agendamento(
         hospedes[idxHospede].get(),
         funcionarios[idxFuncionario].get(),
@@ -196,7 +243,9 @@ void criarAgendamento() {
     cout << "Agendamento criado com sucesso!\n";
 }
 
-// ---------- Portaria ----------
+// ============================================================
+// PORTARIA
+// ============================================================
 
 void registrarEntradaPortaria() {
     if (hospedes.empty() && funcionarios.empty()) {
@@ -207,6 +256,9 @@ void registrarEntradaPortaria() {
     cout << "1 - Hospede\n2 - Funcionario\n";
     int tipoPessoa = lerInteiro("Quem esta entrando? ");
 
+    // Pessoa* generico: tanto Hospede* quanto Funcionario* podem
+    // ser guardados aqui, porque as duas classes herdam de Pessoa.
+    // E exatamente o tipo que RegistroEntrada espera no construtor.
     Pessoa* pessoaSelecionada = nullptr;
 
     if (tipoPessoa == 1) {
@@ -233,6 +285,10 @@ void registrarEntradaPortaria() {
     string dataHora = lerLinha("Data/Hora da entrada: ");
     string autorizacaoPor = lerLinha("Autorizado por: ");
 
+    // registrarAcesso espera um unique_ptr<RegistroAcesso>. Como
+    // RegistroEntrada herda de RegistroAcesso, um unique_ptr<RegistroEntrada>
+    // e aceito automaticamente no lugar (conversao de ponteiro de
+    // classe filha para classe base).
     portaria.registrarAcesso(make_unique<RegistroEntrada>(pessoaSelecionada, dataHora, autorizacaoPor));
     cout << "Entrada registrada com sucesso!\n";
 }
@@ -276,7 +332,12 @@ void registrarSaidaPortaria() {
     cout << "Saida registrada com sucesso!\n";
 }
 
-// ---------- Menus ----------
+// ============================================================
+// MENUS
+// ============================================================
+// Cada menu e um loop do-while: mostra as opcoes, le a escolha,
+// executa a funcao correspondente, e repete ate o usuario
+// escolher "0 - Voltar".
 
 void menuCadastros() {
     int opcao;
@@ -341,6 +402,10 @@ void menuPortaria() {
         }
     } while (opcao != 0);
 }
+
+// ============================================================
+// MENU PRINCIPAL
+// ============================================================
 
 int main() {
     int opcao;
