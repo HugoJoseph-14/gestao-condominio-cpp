@@ -52,6 +52,9 @@ gestao-condominio-cpp/
 │   └── output/             # Diretório do executável compilado
 ├── .gitignore
 └── README.md
+```
+
+---
 
 ## Instruções de Uso
 
@@ -68,10 +71,7 @@ Na raiz do projeto, rode:
 g++ -std=c++17 -Wall -Wextra -I include src/*.cpp -o src/output/main.exe
 ```
 
-> No Windows (PowerShell), crie a pasta de saída antes, caso ainda não exista:
-> ```powershell
-> mkdir src\output
-> ```
+No Windows (PowerShell), crie a pasta de saída antes, caso ainda não exista: `mkdir src\output`
 
 ### Executando
 
